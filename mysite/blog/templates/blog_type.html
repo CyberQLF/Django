@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">共有{{ blogs.count }}篇文章</h3></div>
+                  <div class="panel-body">
+                        <ul style="list-style: none">
+                            {% for blog in blogs%}
+                                <li>作者:{{ blog.author }}&nbsp;&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true"></span>{{ blog.create_time|date:"Y-m-d"}}</li>
+                                <li>&nbsp;&nbsp;<a href="{% url 'blog_detail' blog.pk%}">{{ blog.content|truncatechars:20 }}</a></li>
+                                {% empty %}
+                                <li>暂无文章</li>
+                            {% endfor %}
+                        </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

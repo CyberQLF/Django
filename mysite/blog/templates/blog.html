@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block is_active %}
+active
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-8 col-sm-8 col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 class="panel-title">共有{{ page.object_list.count }}篇文章</h3></div>
+                  <div class="panel-body">
+                        <ul style="list-style: none">
+                            {% for blog in page.object_list%}
+                                <li>作者:{{ blog.author }}&nbsp;&nbsp;<span class="glyphicon glyphicon-time" aria-hidden="true"></span>{{ blog.create_time|date:"Y-m-d"}}</li>
+                                <li>&nbsp;&nbsp;<a href="{% url 'blog_detail' blog.pk%}">{{ blog.content|truncatechars:20 }}</a></li>
+                                <li><hr></li>
+                                {% empty %}
+                                <li>暂无文章</li>
+                            {% endfor %}
+                        </ul>
+                  </div>
+                </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">博客分类</h3>
+                  </div>
+                  <div class="panel-body">
+                    <ul style="list-style: none">
+                        {% for blog_type in blog_types %}
+                            <a href="{% url 'blog_type' blog_type.pk%}"><li>{{ blog_type.type_name }}</li></a>
+                            {% empty %}
+                            <li>无分类</li>
+                        {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+            </div>
+        </div>
+        {# 分页图标 #}
+        <div class="row">
+            <nav aria-label="Page navigation">
+              <ul class="pagination">
+                  {% if page.has_previous %}
+                      <li>
+                          <a href="?page={{ page.previous_page_number }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                      </li>
+                  {% endif %}
+                  {% for number in  pages.page_range%}
+                      {% ifequal number page.number%}
+                            <li class="active"><a href="?page={{ number }}">{{ number }}</a></li>
+                      {% endifequal %}
+                      {% ifnotequal number page.number%}
+                            <li><a href="?page={{ number }}">{{ number }}</a></li>
+                      {% endifnotequal %}
+                  {% endfor %}
+                  {% if page.has_next %}
+                      <li>
+                          <a href="?page={{ page.next_page_number }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                          </a>
+                      </li>
+                  {% endif %}
+              </ul>
+            </nav>
+        </div>
+    </div>
+{% endblock %}
